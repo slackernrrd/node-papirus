@@ -1,6 +1,6 @@
 {
   "name": "node-papirus",
-  "version": "0.1.17",
+  "version": "0.1.18",
   "description": "A library for interacting with the PaPiRus via the repaper gratis library (https://github.com/repaper/gratis)",
   "main": "dist/Papirus.js",
   "scripts": {
