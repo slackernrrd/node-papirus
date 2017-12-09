@@ -1,0 +1,28 @@
+{
+  "name": "node-papirus",
+  "version": "0.1.12",
+  "description": "A library for interacting with the PaPiRus via the repaper gratis library (https://github.com/repaper/gratis)",
+  "main": "dist/Papirus.js",
+  "scripts": {
+    "build": "babel src -d dist --presets env --plugins add-module-exports",
+    "prepublishOnly": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "papirus",
+    "epd",
+    "repaper"
+  ],
+  "author": "Kim Metso <kim@slackernrrd.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-preset-env": "^1.6.1"
+  },
+  "dependencies": {
+    "bluebird": "^3.5.1",
+    "gm": "^1.23.0",
+    "jimp": "^0.2.28"
+  }
+}
