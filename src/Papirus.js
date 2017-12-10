@@ -4,9 +4,11 @@ import PapirusImage from './PapirusImage';
 
 export default class Papirus {
 	constructor(width, height) {
+		this.width = width;
+		this.height = height;
 		this.queue = new AsyncOpQueue();
 		this.epd = new Epd();
-		this.image = new PapirusImage(200, 96);
+		this.image = new PapirusImage(this.width, this.height);
 	}
 
 	reset() {
@@ -17,7 +19,7 @@ export default class Papirus {
 
 	clear() {
 		this.queue.push(() => {
-			this.image = new PapirusImage(200, 96);
+			this.image = new PapirusImage(this.width, this.height);
 			return this;
 		});
 		return this;
