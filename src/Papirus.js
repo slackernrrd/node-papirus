@@ -68,7 +68,7 @@ export default class Papirus {
 
 	writeToFile(path) {
 		this.queue.push(() => {
-			console.log(`Writing image to file ${path}...`)
+			console.log(`Writing image to file ${path}...`);
 			return this.image
 				.writeToFile(path)
 				.then(() => {
