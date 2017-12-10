@@ -1,12 +1,14 @@
 {
   "name": "node-papirus",
   "version": "0.1.21",
+  "repository": "https://github.com/slackernrrd/node-papirus",
   "description": "A library for interacting with the PaPiRus via the repaper gratis library (https://github.com/repaper/gratis)",
   "main": "dist/Papirus.js",
   "scripts": {
     "build": "babel src -d dist --presets env --plugins add-module-exports",
     "prepublishOnly": "npm run build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "version": "npm run build && git add -A dist",
+    "postversion": "git push && git push --tags"
   },
   "keywords": [
     "papirus",
