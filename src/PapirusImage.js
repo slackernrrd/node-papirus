@@ -1,16 +1,20 @@
 import Jimp from 'jimp';
-import gm from 'gm';
+import Dither from 'image-dither';
 
 export default class PapirusImage {
 	constructor(width, height) {
 		this.width = width;
 		this.height = height;
 		this.image = new Jimp(width, height, 0xffffffff);
+		this.dither = new Dither({
+			matrix: Dither.matrices.floydSteinberg
+		});
 	}
 
 	addImage(path) {
 		return Jimp.read(path).then((image) => {
 			image.contain(this.width, this.height);
+			image.bitmap.data = this.dither.dither(image.bitmap.data, this.width);
 			this.image.composite(image, 0, 0);
 			return this;
 		});
@@ -25,53 +29,35 @@ export default class PapirusImage {
 
 	toBuffer() {
 		return new Promise((resolve, reject) => {
-			this.image.write('papirus.tmp.bmp', (err) => {
-				if (err) { reject(new Error(err)); return; }
+			const buffer = Buffer.alloc((this.width * this.height) / 8);
+			let currentByte = 0x00;
+			let currentBitPos = 0;
+			let byteCount = 0;
+			this.image.scan(0, 0, this.image.bitmap.width, this.image.bitmap.height, (x, y, idx) => {
+				const red = this.image.bitmap.data[idx];
+				let bit = 1;
+				if (red === 0xff) {
+					bit = 0;
+				}
+				currentByte = currentByte | (bit << (currentBitPos));
+				currentBitPos++;
+				if (currentBitPos > 7) {
+					currentBitPos = 0;
+					buffer.writeUInt8(currentByte, byteCount++);
+					currentByte = 0x00;
+				}
+			});
 
-				gm('papirus.tmp.bmp')./*dither().*/monochrome().endian('MSB').write('papirus.mono.bmp', (err) => {
-					if (err) { reject(new Error(err)); return; }
-
-					Jimp.read('papirus.mono.bmp').then((image) => {
-						const buffer = Buffer.alloc((this.width * this.height) / 8);
-						let currentByte = 0x00;
-						let currentBitPos = 0;
-						let byteCount = 0;
-						image.scan(0, 0, image.bitmap.width, image.bitmap.height, (x, y, idx) => {
-							const red = image.bitmap.data[idx];
-							let bit = 1;
-							if (red === 0xff) {
-								bit = 0;
-							}
-							currentByte = currentByte | (bit << (currentBitPos));
-							currentBitPos++;
-							if (currentBitPos > 7) {
-								currentBitPos = 0;
-								buffer.writeUInt8(currentByte, byteCount++);
-								currentByte = 0x00;
-							}
-						});
-
-						resolve(buffer);
-					})
-					.catch((err) => {
-						reject(new Error(err));
-					});
-				});
-			})
+			resolve(buffer);
 		});
 	}
 
 	writeToFile(path) {
 		return new Promise((resolve, reject) => {
-			this.image.write('papirus.tmp.bmp', (err) => {
+			this.image.write(path, (err) => {
 				if (err) { reject(new Error(err)); return; }
-
-				gm('papirus.tmp.bmp')./*dither().*/monochrome().endian('MSB').write(path, (err) => {
-					if (err) { reject(new Error(err)); return; }
-
-					resolve(this);
-				});
-			})
+				return resolve(this);
+			});
 		});
 	}
 
