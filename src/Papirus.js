@@ -25,10 +25,10 @@ export default class Papirus {
 		return this;
 	}
 
-	addImage(path) {
+	addImage(path, dither = true) {
 		this.queue.push(() => {
 			console.log(`Opening image '${path}'...`);
-			return this.image.addImage(path)
+			return this.image.addImage(path, dither)
 				.then((image) => {
 					console.log('Image opened.');
 					return this;

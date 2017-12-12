@@ -9,12 +9,20 @@ export default class PapirusImage {
 		this.dither = new Dither({
 			matrix: Dither.matrices.floydSteinberg
 		});
+		this.monochrome = new Dither({
+			matrix: Dither.matrices.none
+		});
 	}
 
-	addImage(path) {
+	addImage(path, dither = true) {
 		return Jimp.read(path).then((image) => {
 			image.contain(this.width, this.height);
-			image.bitmap.data = this.dither.dither(image.bitmap.data, this.width);
+			if (dither) {
+				image.bitmap.data = this.dither.dither(image.bitmap.data, this.width);
+			}
+			else {
+				image.bitmap.data = this.monochrome.dither(image.bitmap.data, this.width);
+			}
 			this.image.composite(image, 0, 0);
 			return this;
 		});
