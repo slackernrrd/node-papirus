@@ -1,4 +1,4 @@
-import Pigpio from 'pigpio-mock';
+import Pigpio from 'pigpio';
 
 let Gpio = Pigpio.Gpio;
 
