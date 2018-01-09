@@ -10,7 +10,7 @@ export default class EpdButtons {
 			edge: Gpio.EITHER_EDGE
 		};
 		let buttonGpios = (piZero ? [21, 16, 20, 19, 26] : [16, 26, 20, 21]);
-		buttonGpios.each((gpio, index) => {
+		buttonGpios.forEach((gpio, index) => {
 			let button = new Gpio(gpio, buttonConfig);
 			button.on('interrupt', ((button) => {return (level) => {
 				console.log(`Button ${button} pressed`);
