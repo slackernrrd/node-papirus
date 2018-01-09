@@ -1,5 +1,6 @@
 import AsyncOpQueue from './AsyncOpQueue';
 import Epd from './Epd';
+import EpdButtons from './EpdButtons';
 import PapirusImage from './PapirusImage';
 
 export default class Papirus {
@@ -8,6 +9,7 @@ export default class Papirus {
 		this.height = height;
 		this.queue = new AsyncOpQueue();
 		this.epd = new Epd();
+		this.buttons = new EpdButtons(true);
 		this.image = new PapirusImage(this.width, this.height);
 	}
 
