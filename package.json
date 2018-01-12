@@ -20,12 +20,12 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-plugin-add-module-exports": "^0.2.1",
-    "babel-preset-env": "^1.6.1",
-    "pigpio-mock": "0.0.1"
+    "babel-preset-env": "^1.6.1"
   },
   "dependencies": {
     "bluebird": "^3.5.1",
     "image-dither": "^1.0.1",
-    "jimp": "^0.2.28"
+    "jimp": "^0.2.28",
+    "onoff": "^1.1.9"
   }
 }

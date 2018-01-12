@@ -4,12 +4,12 @@ import EpdButtons from './EpdButtons';
 import PapirusImage from './PapirusImage';
 
 export default class Papirus {
-	constructor(width, height) {
+	constructor(width, height, piZero) {
 		this.width = width;
 		this.height = height;
 		this.queue = new AsyncOpQueue();
 		this.epd = new Epd();
-		this.buttons = new EpdButtons(true);
+		this.buttons = new EpdButtons(piZero);
 		this.image = new PapirusImage(this.width, this.height);
 	}
 
@@ -89,6 +89,10 @@ export default class Papirus {
 		return this.queue.execute().then(() => {
 			return this;
 		});
+	}
+
+	onButton(index, cb) {
+		this.buttons.listen(index, cb);
 	}
 
 	static get FONT_SANS_8_BLACK() { return PapirusImage.FONT_SANS_8_BLACK; }
